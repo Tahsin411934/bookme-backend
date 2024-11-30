@@ -17,7 +17,7 @@ class Discount extends Model
         'effectfrom',
         'effective_till',
     ];
-
+    
     // Relationship with PropertyUnit model (if applicable)
     public function unit()
     {

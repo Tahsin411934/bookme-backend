@@ -11,11 +11,11 @@ class Property extends Model
 
     protected $table = 'property';
     
-    protected $primaryKey = 'property_id'; // Set the primary key
+    protected $primaryKey = 'property_id'; 
 
-    public $incrementing = true; // Disable auto-increment if necessary
+    public $incrementing = true; 
 
-    protected $keyType = 'int'; // Set key type, e.g., 'string' for UUIDs or 'int' for integers
+    protected $keyType = 'int'; 
 
     protected $fillable = [
         'category_id',

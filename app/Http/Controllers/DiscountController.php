@@ -7,18 +7,14 @@ use Illuminate\Http\Request;
 
 class DiscountController extends Controller
 {
-  
-
-    // Show the form for creating a new discount
+   // Show the form for creating a new discount
     public function create()
     {
         return view('discount.create');
     }
-
     // Store a newly created discount in the database
     public function store(Request $request)
     {
-       
         $request->validate([
             'unit_id' => 'required|exists:property_unit,unit_id',
             'discount_percent' => 'nullable|numeric|min:0|max:100',
@@ -31,19 +27,16 @@ class DiscountController extends Controller
 
         return redirect()->back();
     }
-
     // Show a specific discount
     public function show(Discount $discount)
     {
         return view('discount.show', compact('discount'));
     }
-
     // Show the form for editing a discount
     public function edit(Discount $discount)
     {
         return view('discount.edit', compact('discount'));
     }
-
     // Update an existing discount in the database
     public function update(Request $request, Discount $discount)
     {

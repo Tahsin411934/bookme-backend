@@ -9,11 +9,9 @@ class PropertyFacility extends Model
 {
     use HasFactory;
 
-    // Define the table associated with the model
     protected $table = 'property_facilities';
-    // protected $primarykey = 'property_id';
+   
     protected $primaryKey = 'facility_type';
-    // Define the fillable attributes
     protected $fillable = [
         'property_id',
         'facility_type',
@@ -25,7 +23,6 @@ class PropertyFacility extends Model
         'serialno',
     ];
 
-    // Enable timestamps (created_at and updated_at)
     public $timestamps = true;
 
     // Define the relationship if there's a foreign key relationship with the property table

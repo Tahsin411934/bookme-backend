@@ -15,7 +15,7 @@ class AddFacilityController extends Controller
      */
     public function index()
     {
-        // Fetch all property facilities
+       
         $facilities = PropertyFacility::all();
         return view('property_facilities.index', compact('facilities'));
     }
@@ -25,7 +25,7 @@ class AddFacilityController extends Controller
      */
     public function create()
     {
-        // Return the form view for creating a new property facility
+        
         return view('property_facilities.create');
     }
 
@@ -33,10 +33,8 @@ class AddFacilityController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request )
-    {
-      
+    { 
         
-        // Validate the incoming request data
       $data =  $request->validate([
             'property_id' => 'required|integer',
             'facility_type' => 'required|string|max:255',
@@ -69,7 +67,7 @@ class AddFacilityController extends Controller
      
         return redirect('/facilities/' . $inserteData->property_id)
         ->with('success', 'Facility updated successfully.');
-        // Redirect to the property facilities index with a success message
+       
         
     }
 
@@ -78,26 +76,17 @@ class AddFacilityController extends Controller
      */
     public function show(string $id)
 {
-    // Fetch the property with its facilities
+    
     $property = Property::with('facilities')->findOrFail($id);
-
-    // Fetch facilities type based on the category_id of the property
     $facilitiestype = PropertyFacilityType::where('property_category', $property->category_id)->get();
-$icons = Icon::all();
-    // Debugging to verify values (optional)
-    //  dd($property->category_id, $facilitiestype);
-
-    // Return the view with data
+    $icons = Icon::all();
     return view('facilities.show', compact('property', 'id', 'facilitiestype', 'icons'));
 }
-
-    
     /**
      * Show the form for editing the specified resource.
      */
     public function edit(string $id)
     {
-        // Fetch the property facility by ID
         $facility = PropertyFacility::findOrFail($id);
         return view('property_facilities.edit', compact('facility'));
     }
@@ -106,8 +95,7 @@ $icons = Icon::all();
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
-    {
-       
+    { 
         $data = $request->validate([
             'facility_type' => 'string|max:255',
             'facility_name' => 'string|max:255',
@@ -115,8 +103,6 @@ $icons = Icon::all();
         ]);
 
         $facility = PropertyFacility::where('facility_type', $id)->firstOrFail();
-  
-       
         $facility->update([  
             'facilty_name' => $data['facility_name'], 
             'value' => $data['value'],             
@@ -125,26 +111,18 @@ $icons = Icon::all();
         return redirect('/facilities/' . $facility->property_id)
     ->with('success', 'Facility updated successfully.');
     }
-    
-    
-    
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        // Find and delete the property facility
         $facility = PropertyFacility::findOrFail($id);
-
-        // Delete the image file if it exists
         if ($facility->img && file_exists(storage_path('app/public/' . $facility->img))) {
             unlink(storage_path('app/public/' . $facility->img));
         }
 
         $facility->delete();
-
-        // Redirect to the property facilities index with a success message
         return redirect()->route('property_facilities.index')
                          ->with('success', 'Facility deleted successfully.');
     }

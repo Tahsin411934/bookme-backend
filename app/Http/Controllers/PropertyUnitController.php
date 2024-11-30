@@ -13,28 +13,20 @@ class PropertyUnitController extends Controller
      */
     public function index()
     {
-        // Fetch all property units from the database
         $units = PropertyUnit::all();
-
-        // Check if units exist, return a response accordingly
         if ($units->isEmpty()) {
             return response()->json(['message' => 'No property units found.'], 404);
         }
 
         return response()->json($units);
     }
-
-   
-
     /**
      * Store a newly created property unit in storage.
      */
     public function store(Request $request)
     {
-        // Validate the incoming request
-      
             try {
-                // Perform the validation
+                
                 $validated = $request->validate([
                     'property_id' => 'required|integer',
                     'unit_category' => 'required|string',
@@ -47,15 +39,11 @@ class PropertyUnitController extends Controller
                     'isactive' => 'required|boolean',
                 ]);
         
-              // This will display the validated data (if validation passes)
-        
             } catch (\Illuminate\Validation\ValidationException $e) {
-                // Catch validation exception and show errors
+                
                 dd($e->errors());  // This will display the validation error messages
             }
      
-        
-    
         // Handle the image upload if a file is provided
         $imagePath = null;
         if ($request->hasFile('mainimg')) {
@@ -84,31 +72,19 @@ class PropertyUnitController extends Controller
     /**
      * Display the specified property unit.
      */
-    /**
- * Display the specified property unit.
- */
+ 
 public function show($property_id)
 {
-    // Fetch all property units that belong to the given property_id
+    
     $property = Property::with('property_uinit')->findOrFail($property_id);
-    // Return the view with both the property_id and units
     return view('property_units.show', compact('property_id', 'property'));
 }
-
-
-    
-
-    
-
     /**
      * Display property units by property_id.
      */
     public function showByPropertyId($property_id)
     {
-        // Fetch units by the given property_id
         $units = PropertyUnit::where('property_id', $property_id)->get();
-
-        // Check if any units are found for the given property_id
         if ($units->isEmpty()) {
             return response()->json(['message' => 'No units found for this property.'], 404);
         }
@@ -119,11 +95,8 @@ public function show($property_id)
     /**
      * Update the specified property unit in storage.
      */
-   // PropertyUnitController.php
-
 public function update(Request $request, $id)
 {
-    // Validate incoming request data
     $validated = $request->validate([
         'property_id' => 'nullable|integer|exists:properties,id',
         'unit_category' => 'nullable|in:room,seat',
@@ -140,12 +113,9 @@ public function update(Request $request, $id)
     $unit = PropertyUnit::findOrFail($id);
     $unit->update($validated);
 
-    // Redirect back with success message
     return redirect()->route('property_units.show', $unit->property_id)
                      ->with('success', 'Property unit updated successfully.');
 }
-
-
     /**
      * Remove the specified property unit from storage.
      */

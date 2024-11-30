@@ -18,8 +18,6 @@ class PropertyController extends Controller
         $destinations = Destination::all();
         return view('properties.index', compact('properties', 'categories', 'destinations')); // Load view
     }
-
-
     public function create(){
         $properties = Property::all();
         return response()->json([
@@ -28,16 +26,8 @@ class PropertyController extends Controller
             'data'=> $properties
         ]);
     }
-
-
-
-
-
     public function store(Request $request)
     {
-
-        
-        
         try {
           $data=  $request->validate([
                 'category_id' => 'required|integer',
@@ -50,13 +40,10 @@ class PropertyController extends Controller
                 'main_img' => 'required|image|mimes:jpg,png,jpeg|max:2048',
                 'isactive' => 'required|boolean',
             ]);
-
-           
+ 
         }  catch (\Illuminate\Validation\ValidationException $e) {
             dd($e->errors()); 
         }
-       
-
         // Store the uploaded image
         $filePath = $request->file('main_img')->store('properties', 'public');
 
@@ -95,20 +82,12 @@ class PropertyController extends Controller
                 'isactive' => 'nullable|boolean',
                 'main_img' => 'required|string|max:255', // Validate the image if present
                
-            ]);
-         
-            // Debugging: Show the validated data
-          
+            ]); 
     
         } catch (\Illuminate\Validation\ValidationException $e) {
             // Handle the validation exception
             dd($e->errors()); // This will show the validation error messages
         }
-       
-        
-
-        // Assign validated data to the property model
-       
         // $property->destination_id = $validated['destination_id'];
         $property->property_name = $validated['property_name'];
         $property->description = $validated['description'];
@@ -119,8 +98,6 @@ class PropertyController extends Controller
         $property->isactive = $request->has('isactive') ? true : false;
 
         $property->save();
-
-        
         return redirect()->route('properties.index')->with('success', 'Property updated successfully!');
     }
 

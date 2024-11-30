@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class PropertyImageController extends Controller
 {
-    
-
     /**
      * Store a newly created resource in storage.
      */
@@ -24,11 +22,8 @@ class PropertyImageController extends Controller
 
         // Handle file upload
         if ($request->hasFile('path')) {
-            // Store the image in the 'public/images/' directory
-            // The 'public' disk is linked to 'storage/app/public'
             $imagePath = $request->file('path')->store('images', 'public');
         }
-
         // Store the image data in the database
         PropertyImage::create([
             'property_id' => $request->property_id,
@@ -47,38 +42,25 @@ class PropertyImageController extends Controller
     public function show($propertyId)
     { 
         $property = Property::where('property_id', $propertyId)->firstOrFail();
-
-        // Fetch the property images for the given property ID
         $propertyImages = PropertyImage::where('property_id', $propertyId)->get();
     
-        // Pass the propertyImages to the view
         return view('property_images.show', compact('propertyImages', 'propertyId', 'property'));
     }
     
-
-
-
-
-   
-   
-
     /**
      * Remove the specified resource from storage.
      */
     public function destroy($image_id)
     {
-        // Find the image by ID
+        
         $propertyImage = PropertyImage::findOrFail($image_id);
 
-        // Delete the image file from storage (if exists)
         if ($propertyImage->path && file_exists(storage_path('app/public/' . $propertyImage->path))) {
             unlink(storage_path('app/public/' . $propertyImage->path));  // Delete the image file
         }
 
-        // Delete the property image from the database
         $propertyImage->delete();
 
-        // Redirect with a success message
-        return redirect()->route('property_images.show',[$propertyImage->property_id])->with('success', 'Property image deleted successfully.');
+        return redirect()->back()->with('success', 'Property image deleted successfully.');
     }
 }
