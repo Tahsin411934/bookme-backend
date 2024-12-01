@@ -32,17 +32,46 @@ public function apiForPropertySummary($property_id)
     return response()->json($property_summary);  
 }
 // property facilities api for home
-public function apiForPropertyfacilities($property_id)
-{$property_summary = Property::with([
-    'facilities.icons',  
-    'facilities.facilityTypes' 
-])
-->where('property_id', $property_id) 
-->get(); 
+public function apiForPropertyFacilities($property_id)
+{
+    $property_summary = Property::with([
+        'facilities.icons',
+        'facilities.facilityTypes'
+    ])->where('property_id', $property_id)->first();
 
-   
-    return response()->json($property_summary);  
+    if (!$property_summary) {
+        return response()->json(['message' => 'Property not found'], 404);
+    }
+
+    // Transform and group facilities by their facility_typename
+    $groupedFacilities = $property_summary->facilities->groupBy(function ($facility) {
+        return $facility->facilityTypes->facility_typename ?? 'Unknown';
+    })->map(function ($group, $key) {
+        return [
+            'facility_type' => $key,
+            'facilities' => $group->map(function ($facility) {
+                return [
+                    'facility_name' => $facility->facilty_name,
+                    'value' => $facility->value,
+                    'img' => $facility->img,
+                    'icon' => $facility->icons->icon_name ?? null,
+                ];
+            })->values() // Ensure facilities is an array
+        ];
+    })->values(); // Ensure grouped facilities is an array
+
+    // Prepare final response structure
+    $response = [
+        'property_id' => $property_summary->property_id,
+        'property_name' => $property_summary->property_name,
+        'description' => $property_summary->description,
+        'facilities' => $groupedFacilities->toArray(), // Convert to plain array
+    ];
+
+    return response()->json($response);
 }
+
+
 
 
 }

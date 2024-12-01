@@ -24,4 +24,10 @@ class PropertyFacilityType extends Model
     protected $casts = [
         'isactive' => 'boolean',
     ];
+
+    public function facilities()
+{
+    
+    return $this->hasMany(PropertyFacility::class, 'facility_type', 'id');
+}
 }

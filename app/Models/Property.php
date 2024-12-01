@@ -41,6 +41,10 @@ public function images()
 {
     return $this->hasMany(PropertyUnit::class, 'property_id', 'property_id');
 }
+public function property_types()
+{
+    return $this->hasMany(PropertyFacilityType::class, 'property_category', 'category_id');
+}
 
 public function propertySummaries()
     {

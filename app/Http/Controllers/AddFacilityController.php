@@ -102,7 +102,7 @@ class AddFacilityController extends Controller
             'value' => 'required|string',
         ]);
 
-        $facility = PropertyFacility::where('facility_type', $id)->firstOrFail();
+        $facility = PropertyFacility::where('id', $id)->firstOrFail();
         $facility->update([  
             'facilty_name' => $data['facility_name'], 
             'value' => $data['value'],             

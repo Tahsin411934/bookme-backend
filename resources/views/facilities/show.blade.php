@@ -27,7 +27,7 @@
             <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-8">
                 @foreach ($property->facilities as $facility)
                     <div class="bg-white p-6 shadow-lg rounded-lg border border-gray-200 transform hover:scale-105 hover:shadow-xl transition duration-300">
-                        <form action="{{ route('facilities.update', $facility->facility_type) }}" method="POST" class="mt-4">
+                        <form action="{{ route('facilities.update', $facility->id) }}" method="POST" class="mt-4">
                             @csrf
                             @method('PUT')
                             <div class="grid grid-cols-2 gap-5">

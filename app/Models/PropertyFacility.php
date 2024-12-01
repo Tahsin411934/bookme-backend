@@ -11,7 +11,8 @@ class PropertyFacility extends Model
 
     protected $table = 'property_facilities';
    
-    protected $primaryKey = 'facility_type';
+    protected $primaryKey = 'id';
+    public $incrementing = true;
     protected $fillable = [
         'property_id',
         'facility_type',
@@ -38,4 +39,5 @@ class PropertyFacility extends Model
     {
         return $this->belongsTo(PropertyFacilityType::class, 'facility_type', 'id');
     }
+  
 }
