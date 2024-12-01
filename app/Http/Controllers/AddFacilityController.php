@@ -38,7 +38,7 @@ class AddFacilityController extends Controller
       $data =  $request->validate([
             'property_id' => 'required|integer',
             'facility_type' => 'required|string|max:255',
-            'facility_name' => 'required|string|max:255',
+            'facility_name' => 'nullable|string|max:255',
             'value' => 'required|string',
             'icon' => 'required|string',
             'img' => 'nullable|image|mimes:jpg,jpeg,png,gif',

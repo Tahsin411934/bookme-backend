@@ -34,4 +34,8 @@ class PropertyFacility extends Model
     {
         return $this->belongsTo(Icon::class, 'icon', 'id');
     }
+    public function facilityTypes()
+    {
+        return $this->belongsTo(PropertyFacilityType::class, 'facility_type', 'id');
+    }
 }

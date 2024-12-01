@@ -109,7 +109,7 @@
                             <!-- Facility Name -->
                             <div>
                                 <label for="facility_name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility Name</label>
-                                <input type="text" id="facility_name" name="facility_name" required
+                                <input type="text" id="facility_name" name="facility_name" 
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                             </div>
 
@@ -208,16 +208,28 @@
         form.querySelector('.save-button').classList.remove('hidden'); // Show the Save button
     }
 
+   
     function validateDuplicateFacility() {
-            let selectedFacility = document.getElementById('facility_type').value;
-            let facilities = @json($property->facilities);
+    let selectedFacilityType = document.getElementById('facility_type').value.trim();
+    let selectedFacilityName = document.getElementById('facility_name').value.trim();
+    let selectedFacilityValue = document.getElementById('value').value.trim();
+    
+    // Parse facilities passed from backend as JSON
+    let facilities = @json($property->facilities);
 
-            // Check if the selected facility already exists
-            let isDuplicate = facilities.some(facility => facility.facility_type == selectedFacility);
-            if (isDuplicate) {
-                alert('This facility type has already been added.');
-                return false;
-            }
-            return true;
-        }
+    // Check for a duplicate entry where all three values match
+    let isDuplicate = facilities.some(facility => 
+        facility.facility_type === selectedFacilityType &&
+        facility.facility_name === selectedFacilityName &&
+        facility.value === selectedFacilityValue
+    );
+
+    if (isDuplicate) {
+        alert('This combination of facility type, name, and value already exists.');
+        return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission
+}
+
 </script>

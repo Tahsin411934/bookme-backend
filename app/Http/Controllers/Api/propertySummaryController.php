@@ -33,10 +33,13 @@ public function apiForPropertySummary($property_id)
 }
 // property facilities api for home
 public function apiForPropertyfacilities($property_id)
-{
-    $property_summary = Property::with('facilities.icons')  
-                                ->where('property_id', $property_id)  
-                                ->get(); 
+{$property_summary = Property::with([
+    'facilities.icons',  
+    'facilities.facilityTypes' 
+])
+->where('property_id', $property_id) 
+->get(); 
+
    
     return response()->json($property_summary);  
 }
