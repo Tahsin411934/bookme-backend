@@ -209,7 +209,7 @@
                 <div class="p-4">
                     <form action="{{ route('price.store') }}" method="POST">
                         @csrf
-                        <div class="mb-4 ">
+                        <div class="mb-4 hidden">
                             <input type="number" name="unit_id" id="unit_no1" value="" readonly>
                         </div>
 
