@@ -118,6 +118,8 @@
                                         required>
                                         <option value="Double Bed">Double Bed</option>
                                         <option value="Single Bed">Single Bed</option>
+                                        <option value="Couple Cabin">Couple Cabin</option>
+                                        <option value="Family Connecting Cabin"> Family Connecting Cabin</option>
                                     </select>
                                 </div>
 
@@ -157,6 +159,11 @@
                                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                     accept="image/*">
                             </div>
+                            <div class="mt-4">
+    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+    <textarea name="description" id="description" rows="4"
+        class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+</div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>

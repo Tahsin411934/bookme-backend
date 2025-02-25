@@ -18,6 +18,14 @@ class PropertyController extends Controller
         $destinations = Destination::all();
         return view('properties.index', compact('properties', 'categories', 'destinations')); // Load view
     }
+
+    public function spotwiseProperty($spot_id){
+        
+        $properties = Property::where('spot_id', $spot_id)->get();
+        $categories = ServiceCategory::all();
+        $destinations = Destination::all();
+        return view('properties.index', compact('properties', 'categories', 'destinations', 'spot_id'));
+    }
     public function create(){
         $properties = Property::all();
         return response()->json([
@@ -27,11 +35,12 @@ class PropertyController extends Controller
         ]);
     }
     public function store(Request $request)
-    {
+    { 
         try {
           $data=  $request->validate([
                 'category_id' => 'required|integer',
                 'destination_id' => 'required|integer',
+                'spot_id' => 'required|integer',
                 'property_name' => 'required|string|max:255',
                 'description' => 'required|string',
                 'city_district' => 'required|string|max:255',
@@ -51,6 +60,7 @@ class PropertyController extends Controller
         Property::create([
             'category_id' => $request->category_id,
             'destination_id' => $request->destination_id,
+            'spot_id' => $request->spot_id,
             'property_name' => $request->property_name,
             'description' => $request->description,
             'district_city' => $request->{'city_district'},
@@ -61,7 +71,8 @@ class PropertyController extends Controller
         ]);
         session()->flash('success', 'Property added successfully!');
         // Redirect to properties index with success message
-        return redirect()->route('properties.index');
+        return redirect()->route('properties.package', ['spot_id' => $request->spot_id]);
+
     }
 
     public function update(Request $request, $id)
@@ -98,7 +109,8 @@ class PropertyController extends Controller
         $property->isactive = $request->has('isactive') ? true : false;
 
         $property->save();
-        return redirect()->route('properties.index')->with('success', 'Property updated successfully!');
+        return redirect()->route('properties.package', ['spot_id' => $request->spot_id]);
+
     }
 
     public function destroy(Property $property)

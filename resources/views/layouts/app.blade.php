@@ -16,9 +16,23 @@
     <!-- DataTables Buttons CSS -->
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.3.0/css/buttons.dataTables.min.css">
 
-    <!-- Vite Assets -->
-    @vite(['resources/css/app.css','resources/js/app.js']);
+ <!-- Vite Assets -->
+  <script src="https://cdn.tailwindcss.com"></script>
+   
     <script src="https://cdn.ckeditor.com/ckeditor5/38.1.1/classic/ckeditor.js"></script>
+    
+    <!-- Tailwind CSS CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Flowbite CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@1.5.4/dist/flowbite.min.css" rel="stylesheet">
+
+    <!-- Flowbite JavaScript CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@1.5.4/dist/flowbite.min.js"></script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.js"></script>
+    
+    <link href="https://cdn.jsdelivr.net/npm/flowbite@2.5.2/dist/flowbite.min.css" rel="stylesheet" />
 
 </head>
 <body class="font-sans antialiased">
@@ -82,5 +96,17 @@
             });
         });
     </script>
+    <script>
+    import './bootstrap';
+import 'flowbite';
+
+import Alpine from 'alpinejs';
+
+window.Alpine = Alpine;
+import Swal from 'sweetalert2/dist/sweetalert2.js';
+Alpine.start();
+
+    </script>
+    
 </body>
 </html>

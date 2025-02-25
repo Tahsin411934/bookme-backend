@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\PropertyImage;
+use App\Models\PropertyUnit;
 
 class propertySummaryController extends Controller
 // property api for home
@@ -70,7 +71,12 @@ public function apiForPropertyFacilities($property_id)
 
     return response()->json($response);
 }
+public function apiForPropertyUnit($property_id){
 
+    $units = PropertyUnit::with('price','discount')-> where('property_id', $property_id)->get();
+
+    return response()->json($units);
+}
 
 
 

@@ -17,4 +17,9 @@ class Price extends Model
         'effectfrom',
         'effective_till',
     ];
+    
+    public function propertyUnits()
+    {
+        return $this->belongsTo(Price::class, 'unit_id', 'unit_id');
+    }
 }

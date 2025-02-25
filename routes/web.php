@@ -9,6 +9,9 @@ use App\Http\Controllers\PropertySummaryController;
 use App\Http\Controllers\PropertyUnitController;
 use App\Http\Controllers\PriceController;
 use App\Http\Controllers\DiscountController;
+use App\Http\Controllers\SpotController;
+use App\Http\Controllers\ServiceCategoryController;
+use App\Http\Controllers\TourConsultationRequestAdminController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,7 +31,7 @@ Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-
+Route::resource('spots', SpotController::class);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -40,6 +43,7 @@ Route::middleware('auth')->group(function () {
 
 
 Route::resource('properties', PropertyController::class);
+Route::get('/package/{spot_id}', [PropertyController::class, 'spotwiseProperty'])->name('properties.package');
 Route::resource('facilities', AddFacilityController::class);
 // Route::resource('property_images', PropertyImageController::class);
 Route::get('/property_images/{property_id}', [PropertyImageController::class, 'show'])->name('property_images.show');
@@ -49,6 +53,13 @@ Route::delete('/property_images/{image_id}', [PropertyImageController::class, 'd
 // Route::resource('AddImages', AddImageController::class);
 
 
+
+
+
+// Resource route for TourConsultationRequestController
+Route::resource('tour-consultation-requests', TourConsultationRequestAdminController::class);
+
+Route::resource('service_categories', ServiceCategoryController::class);
 
 Route::resource('property-summary', PropertySummaryController::class);
 Route::apiResource('property-units', PropertyUnitController::class);

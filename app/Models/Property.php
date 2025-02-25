@@ -20,6 +20,7 @@ class Property extends Model
     protected $fillable = [
         'category_id',
         'destination_id',
+        'spot_id',
         'property_name',
         'description',
         'district_city',

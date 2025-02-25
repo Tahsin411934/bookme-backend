@@ -2,14 +2,14 @@
     <!-- Button to Open Modal -->
     <div class="w-[95%] mx-auto">
         <div class="container mx-auto mt-4">
-            <h2 class="text-2xl font-bold mb-4">Properties List</h2>
+            <h2 class="text-2xl font-bold mb-4">Packages List</h2>
         
            
             <div class="flex justify-end m-5">
                 <button data-modal-target="static-modal" data-modal-toggle="static-modal" 
                         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" 
                         type="button">
-                    Add Property
+                    Add New Package
                 </button>
             </div>
             
@@ -23,6 +23,7 @@
                         <th class="px-4 py-2 text-left">District/City</th>
                         <th class="px-4 py-2 text-left">Address</th>
                         <th class="px-4 py-2 text-left">Latitude/Longitude</th>
+                        <th class="px-4 py-2 text-left">sPORT</th>
                         <th class="px-4 py-2 text-left">Image</th>
                         <th class="px-4 py-2 text-left">Status</th>
                         <th class="px-4 py-2 text-left">Actions</th>
@@ -35,6 +36,7 @@
                             @csrf
                             @method('PUT')
                             {{-- <td>{{ $property->category_id }}</td> --}}
+                            
                             {{-- <td>
                                 <textarea name="destination_id" class="w-full  border border-gray-300 rounded px-2 py-1 resize-none"  disabled>{{ $property->destination_id }}</textarea>
                             </td>--}}
@@ -53,6 +55,9 @@
                             <td>
                                 <textarea required name="lat_long" class="w-full border border-gray-300 rounded px-2 py-1 resize-none" disabled>{{ $property->lat_long }}</textarea>
                             </td>
+                            <td>
+                                <textarea required name="spot_id" class="w-full border border-gray-300 rounded px-2 py-1 resize-none" disabled>{{ $property->spot_id }}</textarea>
+                            </td>
                             
                             <td>
                                 <textarea required name="main_img" class="w-full border border-gray-300 rounded px-2 py-1 resize-none" disabled>{{ $property->main_img }}</textarea>
@@ -62,7 +67,7 @@
                             </td>
                             <td class="flex space-x-2">
                                 <button type="button" onclick="enableEdit(this)"
-                                class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+                                class="bg-yellow-600 text-white px-3 py-1 rounded hover:bg-yellow-500">Edit</button>
                             <button type="submit"
                                 class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 hidden save-button">Save</button>
                             
@@ -70,15 +75,15 @@
                             
                             
                         </form>
-                        <a href="/facilities/{{$property->property_id}}"
-                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600  save-button">Add details</button>
+                        <a href="/admin/facilities/{{$property->property_id}}"
+                            class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add details</button>
                         
-                        <a href="/property_images/{{$property->property_id}}"
-                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600  save-button">Add Image</button>
-                        <a href="/property-summary/{{$property->property_id}}"
-                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600  save-button">Add Summary</button>
-                        <a href="/property-units/{{$property->property_id}}"
-                            class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600  save-button">Add Room</button>
+                        <a href="/admin/property_images/{{$property->property_id}}"
+                            class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add Image</button>
+                        <a href="/admin/property-summary/{{$property->property_id}}"
+                            class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add Summary</button>
+                        <a href="/admin/property-units/{{$property->property_id}}"
+                            class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add Unit</button>
                         </td>
                     </tr>
                     @endforeach
@@ -107,6 +112,9 @@
                     <div class="p-6 space-y-6">
                         <form action="{{ route('properties.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
+                            <div class="hidden">
+                                <input type="number" value={{$spot_id}} name="spot_id">
+                            </div>
                             <div class="grid gap-4 grid-cols-1 sm:grid-cols-2">
                                 <!-- Category Dropdown -->
                                 <div>

@@ -98,7 +98,7 @@ class AddFacilityController extends Controller
     { 
         $data = $request->validate([
             'facility_type' => 'string|max:255',
-            'facility_name' => 'string|max:255',
+            'facility_name' => 'nullable|string|max:255',
             'value' => 'required|string',
         ]);
 

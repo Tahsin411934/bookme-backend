@@ -24,6 +24,7 @@ class PropertyUnit extends Model
         'unit_type',
         'person_allowed',
         'additionalbed',
+        'description',
         'mainimg',
         'isactive',
     ];
@@ -34,6 +35,10 @@ class PropertyUnit extends Model
     }
     public function price()
     {
-        return $this->hasMany(price::class, 'unit_id', 'unit_id');
+        return $this->hasMany(Price::class, 'unit_id', 'unit_id');
+    }
+    public function discount()
+    {
+        return $this->hasMany(Discount::class, 'unit_id', 'unit_id');
     }
 }
