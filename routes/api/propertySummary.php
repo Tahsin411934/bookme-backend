@@ -6,8 +6,10 @@ Route::get('/propertyImages/{property_id}', [propertySummaryController::class, '
 Route::get('/propertySummary/{property_id}', [propertySummaryController::class, 'apiForPropertySummary']);
 Route::get('/propertyfacilities/{property_id}', [propertySummaryController::class, 'apiForPropertyfacilities']);
 Route::get('/propertyUnit/{property_id}', [propertySummaryController::class, 'apiForPropertyUnit']);
-Route::get('/categories', [propertySummaryController::class, 'apiForCategory']);
 
 Route::get('/', function () {
     return response()->json(['message' => 'Successfullay added']);
 });
+
+
+Route::get('/propertySummary1', [propertySummaryController::class, 'apiCreate1']);

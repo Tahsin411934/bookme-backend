@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container">
-    <h2 class="text-2xl mt-10 font-bold mb-4">Property Unit</h2>
+        <h2 class="text-2xl mt-10 font-bold mb-4">Property Unit</h2>
         <div class="mb-8 p-6 bg-gray-50 shadow-md rounded-lg">
             <h2 class="text-2xl font-semibold mb-4">Property Name: <span
                     class="text-blue-600">{{ $property->property_name }}</span></h2>
@@ -15,47 +15,116 @@
             Add New
         </button>
         @if ($property->property_uinit->isEmpty())
-            <p>No units found for this property.</p>
+        <p>No units found for this property.</p>
         @else
-            <table id="example" class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Unit No</th>
-                        <th>Unit Name</th>
-                        <th>Unit Type</th>
-                        <th>Person Allowed</th>
-                        <th>Additional Bed</th>
-                        <th>Status</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($property->property_uinit as $unit)
-                        <tr>
-                            <td>{{ $unit->unit_no }}</td>
-                            <td>{{ $unit->unit_name }}</td>
-                            <td>{{ $unit->unit_type }}</td>
-                            <td>{{ $unit->person_allowed }}</td>
-                            <td>{{ $unit->additional_bed ? 'Yes' : 'No' }}</td>
-                            <td>{{ $unit->isactive ? 'Active' : 'Inactive' }}</td>
-                            <td>
-                                <button data-modal-target="add-price-modal" data-modal-toggle="add-price-modal"
-                                    class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-                                    onclick="setUnitForPrice('{{ $unit->unit_id }}')">
-                                    <span>Add Price</span>
-                                </button>
+        <table id="example" class="table-auto w-full border-collapse">
+            <thead>
+                <tr class="bg-gray-100">
+                    <th class="px-4 py-2 border">Unit No</th>
+                    <th class="px-4 py-2 border">Unit Name</th>
+                    <th class="px-4 py-2 border">Unit Type</th>
+                    <th class="px-4 py-2 border">Persons Allowed</th>
+                    <th class="px-4 py-2 border">Additional Bed</th>
+                    <th class="px-4 py-2 border">Status</th>
+                    <th class="px-4 py-2 border">Action</th>
+                    <th class="px-4 py-2 border">set offer</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($property->property_uinit as $unit)
+                <tr class="bg-white hover:bg-gray-50">
+                    <form action="{{ route('property-units.update', $unit->unit_id) }}" method="POST"
+                        class="update-form">
+                        @csrf
+                        @method('PUT')
 
-                                <!-- Add Discount Button -->
-                                <button data-modal-target="add-discount-modal" data-modal-toggle="add-discount-modal"
-                                    class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
-                                    onclick="setUnitForDiscount('{{ $unit->unit_id }}')">
-                                    <span>Add Discount</span>
-                                </button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                        <td>
+                            <textarea name="unit_no" class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                disabled>{{ $unit->unit_no }}</textarea>
+                        </td>
+                        <td>
+                            <textarea name="unit_name"
+                                class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                disabled>{{ $unit->unit_name }}</textarea>
+                        </td>
+                        <td>
+                            <textarea name="unit_type"
+                                class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                disabled>{{ $unit->unit_type }}</textarea>
+                        </td>
+                        <td>
+                            <textarea name="person_allowed"
+                                class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                disabled>{{ $unit->person_allowed }}</textarea>
+                        </td>
+                        <td>
+                            <select name="additional_bed" class="w-full border border-gray-300 rounded px-2 py-1">
+                                <option value="1" {{ $unit->additional_bed ? 'selected' : '' }}>Yes</option>
+                                <option value="0" {{ !$unit->additional_bed ? 'selected' : '' }}>No</option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select name="isactive" class="w-full border border-gray-300 rounded px-2 py-1">
+                                <option value="1" {{ $unit->isactive ? 'selected' : '' }}>Active</option>
+                                <option value="0" {{ !$unit->isactive ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </td>
+
+                        <td class="flex space-x-2">
+                            <!-- Edit Button -->
+                            <button type="button" onclick="enableEdit(this)"
+                                class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+                            <!-- Save Button -->
+                            <button type="submit"
+                                class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 hidden save-button">Save</button>
+                    </form>
+
+                    <!-- Delete Button -->
+                    <form action="{{ route('property-units.destroy', $unit->unit_id) }}" method="POST"
+                        class="inline-block">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit"
+                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                    </form>
+                    <a href="{{ url('/package/' . $unit->unit_id) }}">
+                        <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Add Packages</button>
+                    </a>
+                    </td>
+
+                    <td>
+                        <button data-modal-target="add-price-modal" data-modal-toggle="add-price-modal"
+                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                            onclick="setUnitForPrice('{{ $unit->unit_id }}')">
+                            <span>Add Price</span>
+                        </button>
+
+                        <!-- Add Discount Button -->
+                        <button data-modal-target="add-discount-modal" data-modal-toggle="add-discount-modal"
+                            class="bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                            onclick="setUnitForDiscount('{{ $unit->unit_id }}')">
+                            <span>Add Discount</span>
+                        </button>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+
+        <script>
+        // Function to enable edit mode
+        function enableEdit(button) {
+            const row = button.closest('tr');
+            const textareas = row.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.disabled = false;
+            });
+            row.querySelector('.save-button').classList.remove('hidden');
+            button.classList.add('hidden');
+        }
+        </script>
+        y
         @endif
     </div>
 
@@ -160,10 +229,11 @@
                                     accept="image/*">
                             </div>
                             <div class="mt-4">
-    <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-    <textarea name="description" id="description" rows="4"
-        class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
-</div>
+                                <label for="description"
+                                    class="block text-sm font-medium text-gray-700">Description</label>
+                                <textarea name="description" id="description" rows="4"
+                                    class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></textarea>
+                            </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
@@ -207,8 +277,8 @@
                         data-modal-hide="add-price-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -281,8 +351,8 @@
                         data-modal-hide="add-discount-modal">
                         <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
                             viewBox="0 0 14 14">
-                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                                stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
+                            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6" />
                         </svg>
                         <span class="sr-only">Close modal</span>
                     </button>
@@ -348,25 +418,25 @@
 
 
     <script>
-        // Function to set unit_no for the Add Price Modal
-        function setUnitForPrice(unitNo) {
-            // Set the unit_no field for the price modal
-            document.getElementById('unit_no1').value = unitNo;
+    // Function to set unit_no for the Add Price Modal
+    function setUnitForPrice(unitNo) {
+        // Set the unit_no field for the price modal
+        document.getElementById('unit_no1').value = unitNo;
 
-            // Show the Add Price Modal
-            const priceModal = document.getElementById('add-price-modal');
-            priceModal.classList.remove('hidden');
-        }
+        // Show the Add Price Modal
+        const priceModal = document.getElementById('add-price-modal');
+        priceModal.classList.remove('hidden');
+    }
 
-        // Function to set unit_id for the Add Discount Modal
-        function setUnitForDiscount(unitNo) {
-            // Set the unit_id field for the discount modal
-            document.getElementById('unit_id_discount').value = unitNo;
+    // Function to set unit_id for the Add Discount Modal
+    function setUnitForDiscount(unitNo) {
+        // Set the unit_id field for the discount modal
+        document.getElementById('unit_id_discount').value = unitNo;
 
-            // Show the Add Discount Modal
-            const discountModal = document.getElementById('add-discount-modal');
-            discountModal.classList.remove('hidden');
-        }
+        // Show the Add Discount Modal
+        const discountModal = document.getElementById('add-discount-modal');
+        discountModal.classList.remove('hidden');
+    }
     </script>
 
 </x-app-layout>

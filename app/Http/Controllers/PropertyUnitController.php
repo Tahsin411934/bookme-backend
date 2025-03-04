@@ -98,7 +98,8 @@ public function show($property_id)
      * Update the specified property unit in storage.
      */
 public function update(Request $request, $id)
-{
+{ try {
+      
     $validated = $request->validate([
         'property_id' => 'nullable|integer|exists:properties,id',
         'unit_category' => 'nullable|in:room,seat',
@@ -111,12 +112,20 @@ public function update(Request $request, $id)
         'isactive' => 'nullable|boolean',
     ]);
 
+    
+
+} catch (\Illuminate\Validation\ValidationException $e) {
+    
+    dd($e->errors()); // This will show the validation error messages
+}
+   
+
     // Find the unit and update with the validated data
     $unit = PropertyUnit::findOrFail($id);
     $unit->update($validated);
 
-    return redirect()->route('property_units.show', $unit->property_id)
-                     ->with('success', 'Property unit updated successfully.');
+    return redirect()->back()->with('success', 'Property unit updated successfully.');
+
 }
     /**
      * Remove the specified property unit from storage.

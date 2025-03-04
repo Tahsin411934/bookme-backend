@@ -75,43 +75,53 @@ class PropertyController extends Controller
 
     }
 
+   
     public function update(Request $request, $id)
     {
-        // Find the property by ID or fail if not found
         $property = Property::findOrFail($id);
-
-        // Validate the incoming data
-        try {
-            // Perform validation with the required rules
-            $validated = $request->validate([
-                'destination_id' => 'nullable|integer',
-                'property_name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'city_district' => 'required|string|max:255', // Change this to match the input field name
-                'address' => 'required|string|max:255',
-                'lat_long' => 'required|string|max:255', // Change this to match the input field name
-                'isactive' => 'nullable|boolean',
-                'main_img' => 'required|string|max:255', // Validate the image if present
-               
-            ]); 
     
-        } catch (\Illuminate\Validation\ValidationException $e) {
-            // Handle the validation exception
-            dd($e->errors()); // This will show the validation error messages
+        // Debugging: Check if the request has any files
+     
+    
+        $validated = $request->validate([
+            'destination_id' => 'nullable|integer',
+            'property_name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'city_district' => 'required|string|max:255',
+            'address' => 'required|string|max:255',
+            'lat_long' => 'required|string|max:255',
+            'isactive' => 'nullable|boolean',
+            'spot_id' => 'required|integer|exists:spots,id',
+            'main_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Image validation
+        ]);
+    
+        // Handle file upload
+        if ($request->hasFile('main_img')) {
+            // Delete the old image if it exists
+            if ($property->main_img && Storage::disk('public')->exists($property->main_img)) {
+                Storage::disk('public')->delete($property->main_img);
+            }
+    
+            // Store the new image
+            $imagePath = $request->file('main_img')->store('properties', 'public');
+            $property->main_img = $imagePath; // Update the image path in the database
         }
-        // $property->destination_id = $validated['destination_id'];
+    
+        // Update other fields
+        $property->destination_id = $validated['destination_id'] ?? null;
         $property->property_name = $validated['property_name'];
         $property->description = $validated['description'];
         $property->district_city = $validated['city_district'];
         $property->address = $validated['address'];
         $property->lat_long = $validated['lat_long'];
-        $property->main_img = $validated['main_img'];
-        $property->isactive = $request->has('isactive') ? true : false;
-
+        $property->isactive = $request->boolean('isactive');
+    
         $property->save();
-        return redirect()->route('properties.package', ['spot_id' => $request->spot_id]);
-
+    
+        return redirect()->route('properties.package', ['spot_id' => $validated['spot_id']])
+                         ->with('success', 'Property updated successfully!');
     }
+    
 
     public function destroy(Property $property)
     {

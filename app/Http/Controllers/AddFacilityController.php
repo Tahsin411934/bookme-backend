@@ -123,7 +123,7 @@ class AddFacilityController extends Controller
         }
 
         $facility->delete();
-        return redirect()->route('property_facilities.index')
+        return redirect()->back()
                          ->with('success', 'Facility deleted successfully.');
     }
 }

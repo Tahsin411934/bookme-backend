@@ -132,7 +132,7 @@
                                     @method('DELETE')
                                     <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
                                     </form>
-                                   <a href="{{ url('/package') }}">  <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-900">Add_Details</button></a>
+                                   <a href="{{ url('/spots') }}">  <button type="submit" class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-900">Add_Details</button></a>
                             </td>
                         
                     </tr>

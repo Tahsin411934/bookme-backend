@@ -13,9 +13,22 @@ class propertySummaryController extends Controller
 {
    public function apiCreate(){
 
-    $property_summary = Property::with('propertySummaries.icons','property_uinit.price')->get();
+    $property_summary = Property::where('isactive', 1)->with('propertySummaries.icons','property_uinit.price')->get();
     return response()->json($property_summary);
 }
+
+public function apiCreate1()
+{
+    $property_summary = Property::where('isactive', 1)
+        ->with([
+            'propertySummaries.icons',
+            'property_unit.price'
+        ])
+        ->get();
+
+    return response()->json($property_summary);
+}
+
 // property images api for home
 public function apiForPropertyImages($property_id){
 
