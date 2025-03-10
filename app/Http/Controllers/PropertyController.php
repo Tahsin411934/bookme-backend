@@ -42,10 +42,10 @@ class PropertyController extends Controller
                 'destination_id' => 'required|integer',
                 'spot_id' => 'required|integer',
                 'property_name' => 'required|string|max:255',
-                'description' => 'required|string',
-                'city_district' => 'required|string|max:255',
+                'description' => 'nullable|string',
+                'city_district' => 'nullable|string|max:255',
                 'address' => 'required|string|max:255',
-                'lat_long' => 'required|string|max:255', 
+                'lat_long' => 'nullable|string|max:255', 
                 'main_img' => 'required|image|mimes:jpg,png,jpeg|max:2048',
                 'isactive' => 'required|boolean',
             ]);
@@ -86,10 +86,10 @@ class PropertyController extends Controller
         $validated = $request->validate([
             'destination_id' => 'nullable|integer',
             'property_name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'city_district' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'city_district' => 'nullable|string|max:255',
             'address' => 'required|string|max:255',
-            'lat_long' => 'required|string|max:255',
+            'lat_long' => 'nullable|string|max:255',
             'isactive' => 'nullable|boolean',
             'spot_id' => 'required|integer|exists:spots,id',
             'main_img' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Image validation

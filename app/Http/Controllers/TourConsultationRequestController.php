@@ -14,12 +14,13 @@ class TourConsultationRequestController extends Controller
 
     // Store a new consultation request
     public function store(Request $request)
-    {
+    { 
         $request->validate([
             'name' => 'required|string|max:255',
             'number' => 'required|string|max:20',
             'address' => 'required|string',
             'additional_info' => 'nullable|string',
+            'property_name' => 'nullable|string',
         ]);
 
         $consultation = TourConsultationRequest::create($request->all());
@@ -35,12 +36,13 @@ class TourConsultationRequestController extends Controller
 
     // Update an existing consultation request
     public function update(Request $request, $id)
-    {
+    { 
         $request->validate([
             'name' => 'sometimes|string|max:255',
             'number' => 'sometimes|string|max:20',
             'address' => 'sometimes|string',
             'additional_info' => 'nullable|string',
+            'property_name' => 'nullable|string',
         ]);
 
         $consultation = TourConsultationRequest::findOrFail($id);

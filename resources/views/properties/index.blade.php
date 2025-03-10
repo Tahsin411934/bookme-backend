@@ -2,22 +2,23 @@
     <!-- Button to Open Modal -->
     <div class="w-[95%] mx-auto">
         <div class="container mx-auto mt-4">
-            <h2 class="text-2xl font-bold mb-4">Packages List</h2>
+            <div class="flex item-center justify-between">
 
-
-            <div class="flex justify-end m-5">
-                <button data-modal-target="static-modal" data-modal-toggle="static-modal"
-                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    type="button">
-                    Add New Package
-                </button>
+                <h2 class="text-2xl font-bold mb-4">Property List: </h2>
+                <div class="flex justify-end mb-4">
+                    <button data-modal-target="static-modal" data-modal-toggle="static-modal"
+                        class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                        type="button">
+                        Add New Property
+                    </button>
+                </div>
             </div>
 
             <!-- Table for displaying properties -->
             <table id="example" class="min-w-full bg-white border border-gray-200">
                 <thead>
                     <tr class="bg-gray-100">
-
+                        <th class="px-4 py-2 text-left">Property Id</th>
                         <th class="px-4 py-2 text-left">Property Name</th>
                         <th class="px-4 py-2 text-left">Description</th>
                         <th class="px-4 py-2 text-left">District/City</th>
@@ -32,13 +33,16 @@
                 </thead>
                 <tbody>
                     @foreach ($properties as $property)
-                    <tr> 
-                        <form action="{{ route('properties.update', $property->property_id) }}" method="POST" enctype="multipart/form-data"
-                            class="update-form">
+                    <tr>
+                        <form action="{{ route('properties.update', $property->property_id) }}" method="POST"
+                            enctype="multipart/form-data" class="update-form">
                             @csrf
                             @method('PUT')
 
-                           
+                            <td>
+                                <textarea class="w-full  border border-gray-300 rounded px-2 py-1 resize-none"
+                                    disabled>{{ $property->property_id }}</textarea>
+                            </td>
 
                             <input type="hidden" name="destination_id" value="{{ $property->destination_id }}">
                             <td>
@@ -47,12 +51,12 @@
                                     disabled>{{ $property->property_name }}</textarea>
                             </td>
                             <td>
-                                <textarea required name="description"
+                                <textarea name="description"
                                     class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
                                     disabled>{{ $property->description }}</textarea>
                             </td>
                             <td>
-                                <textarea required name="city_district"
+                                <textarea name="city_district"
                                     class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
                                     disabled>{{ $property->{'district_city'} }}</textarea>
                             </td>
@@ -62,7 +66,7 @@
                                     disabled>{{ $property->address }}</textarea>
                             </td>
                             <td>
-                                <textarea required name="lat_long"
+                                <textarea name="lat_long"
                                     class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
                                     disabled>{{ $property->lat_long }}</textarea>
                             </td>
@@ -79,7 +83,43 @@
                                 @endif
 
                             </td>
-                            <td><input type="file" name="main_img" class="mt-2 border border-gray-300 rounded px-2 py-1 w-full"></td>
+                            <td>
+                                <label
+                                    class="flex flex-col items-center justify-center cursor-pointer border border-gray-300 rounded px-3 py-2 w-full">
+                                    <input type="file" name="main_img" class="hidden"
+                                        id="fileInput-{{ $property->property_id }}" accept="image/*"
+                                        onchange="showFilePath(event, '{{ $property->property_id }}')">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                        stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round"
+                                            d="M12 16v-8m0 0-3 3m3-3 3 3m-9 4h12" />
+                                    </svg>
+                                </label>
+                                <span id="fileName-{{ $property->property_id }}"
+                                    class="text-xs text-gray-500 mt-1 block text-center"></span>
+                            </td>
+
+                            <script>
+                            function showFilePath(event, propertyId) {
+                                const input = event.target;
+                                const fileNameSpan = document.getElementById('fileName-' + propertyId);
+
+                                if (input.files && input.files[0]) {
+                                    let fileName = input.files[0].name;
+
+                                    // Limit file name length to 10 characters and add '...' if longer
+                                    if (fileName.length > 10) {
+                                        fileName = fileName.substring(0, 7) + '...';
+                                    }
+
+                                    fileNameSpan.textContent = fileName; // Display shortened file name
+                                } else {
+                                    fileNameSpan.textContent = ""; // Clear text if no file is selected
+                                }
+                            }
+                            </script>
+
+
                             <td>
                                 <textarea required name="isactive"
                                     class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
@@ -95,19 +135,20 @@
 
 
                         </form>
-                        <a href="/admin/facilities/{{$property->property_id}}"
+                        <a href="/facilities/{{$property->property_id}}"
                             class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add
                             details</button>
 
-                            <a href="/admin/property_images/{{$property->property_id}}"
+                            <a href="/property_images/{{$property->property_id}}"
                                 class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add
                                 Image</button>
-                                <a href="/admin/property-summary/{{$property->property_id}}"
+                                <a href="/property-summary/{{$property->property_id}}"
                                     class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add
                                     Summary</button>
-                                    <a href="/admin/property-units/{{$property->property_id}}"
+                                    <a href="/property-units/{{$property->property_id}}"
                                         class="bg-green-600 text-white px-3 py-1 rounded hover:bg-green-500  save-button">Add
-                                        Unit</button>
+                                        Packages
+                                        </button>
                                         </td>
                     </tr>
                     @endforeach
@@ -146,7 +187,8 @@
                                 <!-- Category Dropdown -->
                                 <div>
                                     <label for="category_id"
-                                        class="block  text-sm font-medium text-gray-700 dark:text-gray-300">Category</label>
+                                        class="block  text-sm font-medium text-gray-700 dark:text-gray-300">Category
+                                        <span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <select id="category_id" name="category_id"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                         <option value="" disabled selected>Select a Category</option>
@@ -162,7 +204,8 @@
                                 <!-- Destination ID -->
                                 <div>
                                     <label for="destination_id"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Destination</label>
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Destination
+                                        <span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <select id="destination_id" name="destination_id"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                         <option value="" disabled selected>Select a destination</option>
@@ -178,7 +221,7 @@
                                 <div>
                                     <label for="property_name"
                                         class="block text-sm font-medium text-gray-700 dark:text-gray-300">Property
-                                        Name</label>
+                                        Name<span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <input type="text" id="property_name" name="property_name"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                 </div>
@@ -202,7 +245,8 @@
                                 <!-- Address -->
                                 <div>
                                     <label for="address"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address</label>
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Address<span
+                                            class="text-red-500 font-bold text-2xl">*</span></label>
                                     <input type="text" id="address" name="address"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                 </div>
@@ -218,7 +262,8 @@
                                 <!-- Image Upload -->
                                 <div>
                                     <label for="main_img"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image<span
+                                            class="text-red-500 font-bold text-2xl">*</span></label>
                                     <input required type="file" id="main_img" name="main_img"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                 </div>
@@ -226,7 +271,8 @@
                                 <!-- Active (Yes/No) -->
                                 <div>
                                     <label for="isactive"
-                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Active</label>
+                                        class="block text-sm font-medium text-gray-700 dark:text-gray-300">Active<span
+                                            class="text-red-500 font-bold text-2xl">*</span></label>
                                     <select id="isactive" name="isactive"
                                         class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                         <option value="1">Yes</option>
@@ -250,11 +296,11 @@
     </div>
 </x-app-layout>
 <script>
-
-document.querySelector('form').addEventListener('submit', function () {
+document.querySelector('form').addEventListener('submit', function() {
     // Ensure the file input is not disabled
     document.querySelector('input[type="file"]').disabled = false;
 });
+
 function enableEdit(button) {
     const row = button.closest('tr');
     row.querySelectorAll('textarea').forEach(textarea => textarea.disabled = false); // Enable all textarea fields

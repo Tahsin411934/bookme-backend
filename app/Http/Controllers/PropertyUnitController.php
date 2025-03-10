@@ -26,14 +26,13 @@ class PropertyUnitController extends Controller
     public function store(Request $request)
     {
             try {
-                
                 $validated = $request->validate([
                     'property_id' => 'required|integer',
                     'unit_category' => 'required|string',
                     'unit_name' => 'required|string',
                     'unit_type' => 'required|string',
                     'unit_no' => 'required|string',
-                    'description' => 'required|string',
+                    'description' => 'nullable|string',
                     'person_allowed' => 'required|integer',
                     'additionalbed' => 'required|boolean',
                     'mainimg' => 'nullable|image|mimes:jpg,png,jpeg,gif|max:2048',
@@ -98,8 +97,7 @@ public function show($property_id)
      * Update the specified property unit in storage.
      */
 public function update(Request $request, $id)
-{ try {
-      
+{
     $validated = $request->validate([
         'property_id' => 'nullable|integer|exists:properties,id',
         'unit_category' => 'nullable|in:room,seat',
@@ -112,20 +110,11 @@ public function update(Request $request, $id)
         'isactive' => 'nullable|boolean',
     ]);
 
-    
-
-} catch (\Illuminate\Validation\ValidationException $e) {
-    
-    dd($e->errors()); // This will show the validation error messages
-}
-   
-
     // Find the unit and update with the validated data
     $unit = PropertyUnit::findOrFail($id);
     $unit->update($validated);
 
     return redirect()->back()->with('success', 'Property unit updated successfully.');
-
 }
     /**
      * Remove the specified property unit from storage.
@@ -136,6 +125,6 @@ public function update(Request $request, $id)
         $unit = PropertyUnit::findOrFail($id);
         $unit->delete();
 
-        return response()->json(['message' => 'Property unit deleted successfully.']);
+         return redirect()->back()->with('success', 'Property unit updated successfully.');
     }
 }

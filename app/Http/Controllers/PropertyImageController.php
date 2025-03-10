@@ -11,30 +11,35 @@ class PropertyImageController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+   public function store(Request $request)
     {
         // Validate the incoming request
         $request->validate([
             'property_id' => 'required|max:255|integer',
-            'path' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure it's an image file
-            'caption' => 'nullable|string|max:255',
+            'path' => 'required|array',
+            'path.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Ensure each file is an image
+            'caption' => 'required|array',
+            'caption.*' => 'string|max:255', // Ensure each caption is a string
         ]);
 
-        // Handle file upload
+        // Handle file uploads
         if ($request->hasFile('path')) {
-            $imagePath = $request->file('path')->store('images', 'public');
+            foreach ($request->file('path') as $index => $file) {
+                $imagePath = $file->store('images', 'public');
+                
+                // Store each image data in the database
+                PropertyImage::create([
+                    'property_id' => $request->property_id,
+                    'path' => $imagePath,  // Store the file path in the database
+                    'caption' => $request->caption[$index], // Use the corresponding caption
+                ]);
+            }
         }
-        // Store the image data in the database
-        PropertyImage::create([
-            'property_id' => $request->property_id,
-            'path' => $imagePath,  // Store the file path in the database
-            'caption' => $request->caption,
-        ]);
 
         // Redirect or return response
-        return redirect()->back();
-        // return redirect()->route('property_images.show',[$request->property_id])->with('success', 'Property image added successfully.');
+        return redirect()->back()->with('success', 'Property images added successfully.');
     }
+
 
     /**
      * Display the specified resource.

@@ -1,6 +1,6 @@
 <x-app-layout>
     <div class="container">
-        <h2 class="text-2xl mt-10 font-bold mb-4">Property Unit</h2>
+        <h2 class="text-2xl mt-10 font-bold mb-4">Property Packages</h2>
         <div class="mb-8 p-6 bg-gray-50 shadow-md rounded-lg">
             <h2 class="text-2xl font-semibold mb-4">Property Name: <span
                     class="text-blue-600">{{ $property->property_name }}</span></h2>
@@ -71,10 +71,10 @@
                             </select>
                         </td>
 
-                        <td class="flex space-x-2">
+                        <td class=" space-x-2">
                             <!-- Edit Button -->
                             <button type="button" onclick="enableEdit(this)"
-                                class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
+                                class="bg-yellow-500 text-white px-3 py-1 ml-3 mb-3 rounded hover:bg-yellow-600">Edit</button>
                             <!-- Save Button -->
                             <button type="submit"
                                 class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 hidden save-button">Save</button>
@@ -86,16 +86,14 @@
                         @csrf
                         @method('DELETE')
                         <button type="submit"
-                            class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                            class="bg-red-500 text-white px-3   rounded hover:bg-red-600">Delete</button>
                     </form>
-                    <a href="{{ url('/package/' . $unit->unit_id) }}">
-                        <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">Add Packages</button>
-                    </a>
+
                     </td>
 
                     <td>
                         <button data-modal-target="add-price-modal" data-modal-toggle="add-price-modal"
-                            class="bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
+                            class="bg-green-500 mb-3 p-3 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-lg shadow-md transition-all duration-300 ease-in-out transform hover:scale-105"
                             onclick="setUnitForPrice('{{ $unit->unit_id }}')">
                             <span>Add Price</span>
                         </button>
@@ -124,7 +122,20 @@
             button.classList.add('hidden');
         }
         </script>
-        y
+
+        <script>
+        // Function to enable edit mode
+        function enableEdit(button) {
+            const row = button.closest('tr');
+            const textareas = row.querySelectorAll('textarea');
+            textareas.forEach(textarea => {
+                textarea.disabled = false;
+            });
+            row.querySelector('.save-button').classList.remove('hidden');
+            button.classList.add('hidden');
+        }
+        </script>
+
         @endif
     </div>
 
@@ -132,7 +143,7 @@
     <div id="static-modal" data-modal-backdrop="static" tabindex="-1" aria-hidden="true"
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
         <div class="relative p-4 w-full max-w-2xl max-h-full">
-            <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+            <div class="relative bg-white rounded-lg shadow ">
                 <div class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
                     <h3 class="text-xl font-semibold text-gray-900 dark:text-white">
                         Add New Unit
@@ -158,7 +169,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="unit_category" class="block text-sm font-medium text-gray-700">Unit
-                                        Category</label>
+                                        Category<span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <select name="unit_category" id="unit_category"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
@@ -167,34 +178,30 @@
                                     </select>
                                 </div>
                                 <div>
-                                    <label for="unit_name" class="block text-sm font-medium text-gray-700">Unit
-                                        Name</label>
-                                    <select name="unit_name" id="unit_name"
+                                    <label for="unit_name" class="block text-sm font-medium text-gray-700">
+                                        Unit Name<span class="text-red-500 font-bold text-2xl">*</span>
+                                    </label>
+                                    <input type="text" name="unit_name" id="unit_name"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
-                                        <option value="Deluxe Suite">Deluxe Suite</option>
-                                        <option value="Business Class">Business Class</option>
-                                    </select>
                                 </div>
+
                             </div>
 
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label for="unit_type" class="block text-sm font-medium text-gray-700">Unit
-                                        Type</label>
-                                    <select name="unit_type" id="unit_type"
+                                    <label for="unit_type" class="block text-sm font-medium text-gray-700">
+                                        Unit Type<span class="text-red-500 font-bold text-2xl">*</span>
+                                    </label>
+                                    <input type="text" name="unit_type" id="unit_type"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
-                                        <option value="Double Bed">Double Bed</option>
-                                        <option value="Single Bed">Single Bed</option>
-                                        <option value="Couple Cabin">Couple Cabin</option>
-                                        <option value="Family Connecting Cabin"> Family Connecting Cabin</option>
-                                    </select>
                                 </div>
+
 
                                 <div>
                                     <label for="unit_no" class="block text-sm font-medium text-gray-700">Unit
-                                        Number</label>
+                                        Number<span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <input type="text" required name="unit_no" id="unit_no"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
@@ -204,7 +211,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="person_allowed" class="block text-sm font-medium text-gray-700">Persons
-                                        Allowed</label>
+                                        Allowed<span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <input required type="number" name="person_allowed" id="person_allowed"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
@@ -212,7 +219,8 @@
 
                                 <div>
                                     <label for="additionalbed"
-                                        class="block text-sm font-medium text-gray-700">Additional Bed</label>
+                                        class="block text-sm font-medium text-gray-700">Additional Bed<span
+                                            class="text-red-500 font-bold text-2xl">*</span></label>
                                     <select name="additionalbed" id="additionalbed"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
@@ -223,7 +231,8 @@
                             </div>
 
                             <div>
-                                <label for="mainimg" class="block text-sm font-medium text-gray-700">Main Image</label>
+                                <label for="mainimg" class="block text-sm font-medium text-gray-700">Main Image<span
+                                        class="text-red-500 font-bold text-2xl">*</span></label>
                                 <input required type="file" name="mainimg" id="mainimg"
                                     class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                     accept="image/*">
@@ -238,7 +247,7 @@
                             <div class="grid grid-cols-2 gap-4">
                                 <div>
                                     <label for="isactive" class="block text-sm font-medium text-gray-700">Active
-                                        Status</label>
+                                        Status<span class="text-red-500 font-bold text-2xl">*</span></label>
                                     <select name="isactive" id="isactive"
                                         class="mt-1 p-2 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"
                                         required>
@@ -293,7 +302,8 @@
                         <!-- Price input -->
                         <div class="mb-4">
                             <label for="price"
-                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price</label>
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300">Price<span
+                                    class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="number" id="price" name="price"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                 placeholder="Enter price" required>
@@ -303,7 +313,7 @@
                         <div class="mb-4">
                             <label for="effectfrom"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Effective
-                                From</label>
+                                From<span class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="datetime-local" id="effectfrom" name="effectfrom"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                 required>
@@ -313,7 +323,7 @@
                         <div class="mb-4">
                             <label for="effective_till"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Effective
-                                Till</label>
+                                Till<span class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="datetime-local" id="effective_till" name="effective_till"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>
@@ -366,7 +376,7 @@
                         <div class="mb-4">
                             <label for="discount_percent"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Discount Percentage
-                                (%)</label>
+                                (%)<span class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="number" id="discount_percent" name="discount_percent"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                 placeholder="Enter discount percentage" step="0.01">
@@ -375,7 +385,7 @@
                         <div class="mb-4">
                             <label for="discount_amount"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Discount
-                                Amount</label>
+                                Amount<span class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="number" id="discount_amount" name="discount_amount"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                 placeholder="Enter discount amount">
@@ -385,7 +395,7 @@
                         <div class="mb-4">
                             <label for="effectfrom"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Effective
-                                From</label>
+                                From<span class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="datetime-local" id="effectfrom" name="effectfrom"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white"
                                 required>
@@ -395,7 +405,7 @@
                         <div class="mb-4">
                             <label for="effective_till"
                                 class="block text-sm font-medium text-gray-700 dark:text-gray-300">Effective
-                                Till</label>
+                                Till<span class="text-red-500 font-bold text-2xl">*</span></label>
                             <input required type="datetime-local" id="effective_till" name="effective_till"
                                 class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-indigo-500 focus:border-indigo-500 dark:bg-gray-600 dark:border-gray-500 dark:text-white">
                         </div>

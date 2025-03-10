@@ -27,6 +27,7 @@ class Property extends Model
         'address',
         'lat_long',
         'main_img',
+        'price',
         'isactive',
     ];
     // Property.php

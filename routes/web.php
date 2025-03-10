@@ -12,9 +12,18 @@ use App\Http\Controllers\DiscountController;
 use App\Http\Controllers\SpotController;
 use App\Http\Controllers\ServiceCategoryController;
 use App\Http\Controllers\TourConsultationRequestAdminController;
-
+use App\Http\Controllers\FooterPolicyManagementController;
 use App\Http\Controllers\ContactAttributeController;
-
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+|
+| Here is where you can register web routes for your application. These
+| routes are loaded by the RouteServiceProvider and all of them will
+| be assigned to the "web" middleware group. Make something great!
+|
+*/
 
 Route::get('/', function () {
     return view('auth.login');
@@ -33,11 +42,9 @@ Route::middleware('auth')->group(function () {
 });
 
 
+Route::resource('tour-consultation-requests', TourConsultationRequestAdminController::class);
 
 Route::resource('contact-attributes', ContactAttributeController::class);
-
-
-Route::resource('tour-consultation-requests', TourConsultationRequestAdminController::class);
 
 Route::resource('properties', PropertyController::class);
 Route::get('/package/{spot_id}', [PropertyController::class, 'spotwiseProperty'])->name('properties.package');
@@ -49,8 +56,7 @@ Route::post('/property_images', [PropertyImageController::class, 'store'])->name
 Route::delete('/property_images/{image_id}', [PropertyImageController::class, 'destroy'])->name('property_images.destroy');
 // Route::resource('AddImages', AddImageController::class);
 Route::resource('service_categories', ServiceCategoryController::class);
-
-
+Route::resource('footer-policies', FooterPolicyManagementController::class);
 Route::resource('property-summary', PropertySummaryController::class);
 Route::apiResource('property-units', PropertyUnitController::class);
 Route::post('/price', [PriceController::class, 'store'])->name('price.store');

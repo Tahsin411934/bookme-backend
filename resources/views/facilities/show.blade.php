@@ -104,7 +104,7 @@
 
                             <!-- Facility Type -->
                             <div>
-                                <label for="facility_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility Type</label>
+                                <label for="facility_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility Type<span class="text-red-500 font-bold text-2xl">*</span></label>
                                 <select id="facility_type" name="facility_type" required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                     <option value="" disabled selected>Select a facility type</option>
@@ -122,19 +122,19 @@
 
                             <!-- Value -->
                             <div>
-                                <label for="value" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Value</label>
+                                <label for="value" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Value<span class="text-red-500 font-bold text-2xl">*</span></label>
                                 <textarea id="value" name="value"
                                     class="ckeditor mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white"></textarea>
                             </div>
 
                             <!-- Image -->
                             <div>
-                                <label for="img" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image</label>
+                                <label for="img" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Image<span class="text-red-500 font-bold text-2xl">*</span></label>
                                 <input type="file" id="img" name="img"
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                             </div>
                             <div>
-                                <label for="icon" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility icon</label>
+                                <label for="icon" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility icon<span class="text-red-500 font-bold text-2xl">*</span></label>
                                 <select id="icon" name="icon" required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                     <option value="" disabled selected>Select a facility icon</option>
@@ -145,7 +145,7 @@
                             </div>
                             <!-- Active -->
                             <div>
-                                <label for="isactive" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Active</label>
+                                <label for="isactive" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Active<span class="text-red-500 font-bold text-2xl">*</span></label>
                                 <select id="isactive" name="isactive" required
                                     class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
                                     <option value="1">Yes</option>

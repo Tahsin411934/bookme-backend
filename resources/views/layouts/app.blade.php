@@ -78,23 +78,25 @@
 
     <!-- DataTables Initialization Script -->
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable({
-                dom: 'Bfrtip', // This specifies the position of the buttons
-                lengthMenu: [10, 25, 50, 75, 100], // Options for the number of rows per page
-                buttons: [
-                    'copy',        // Copy to clipboard
-                    'excel',       // Excel export
-                    'csv',         // CSV export
-                    'pdf',         // PDF export
-                    'print',       // Print button
-                    {
-                        extend: 'colvis', // Column visibility button
-                        text: 'Column Visibility' // Custom button text
-                    }
-                ]
-            });
-        });
+       $(document).ready(function() {
+    $('#example').DataTable({
+        dom: 'Bfrtip', // This specifies the position of the buttons
+        lengthMenu: [10, 25, 50, 75, 100], // Options for the number of rows per page
+        order: [[0, 'desc']], // প্রথম (০ index) কলাম অনুযায়ী ডিসেন্ডিং অর্ডার
+        buttons: [
+            'copy',        // Copy to clipboard
+            'excel',       // Excel export
+            'csv',         // CSV export
+            'pdf',         // PDF export
+            'print',       // Print button
+            {
+                extend: 'colvis', // Column visibility button
+                text: 'Column Visibility' // Custom button text
+            }
+        ]
+    });
+});
+
     </script>
     <script>
     import './bootstrap';

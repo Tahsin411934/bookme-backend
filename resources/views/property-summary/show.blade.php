@@ -2,7 +2,8 @@
     <div class="container w-[95%] mx-auto">
         <h1 class="text-2xl font-bold mb-4">Property Details</h1>
         <div class="mb-8 p-6 mt-3 bg-gray-50 shadow-md mx-auto w-[95%] rounded-lg">
-            <h2 class="text-2xl font-semibold mb-4">Property Name: <span class="text-blue-600">{{ $property->property_name }}</span></h2>
+            <h2 class="text-2xl font-semibold mb-4">Property Name: <span
+                    class="text-blue-600">{{ $property->property_name }}</span></h2>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <p class="text-gray-700"><strong>District/City:</strong> {{ $property->district_city }}</p>
                 <p class="text-gray-700"><strong>Address:</strong> {{ $property->address }}</p>
@@ -44,52 +45,70 @@
                         @csrf
                         <input type="hidden" name="property_id" value="{{ $property_id }}">
                         <div class="p-4 md:p-5 space-y-4">
-                            <!-- Dynamically Added Rows -->
                             <div id="summaryFields">
+                                @php
+                                $defaultIcons = ['IoLocationOutline', 'FaRegClock', 'PiUsersThree',
+                                'GoCommentDiscussion'];
+                                $defaultLabels = ['location', 'duration', 'person allow', 'policy'];
+                                @endphp
+                                @foreach ($defaultIcons as $index => $icon)
                                 <div class="summaryRow grid grid-cols-3 gap-4 mb-4">
+
                                     <div class="form-group">
-                                        <label for="value" class="block text-sm font-medium text-gray-700">Value</label>
+                                        <label for="value"
+                                            class="block text-sm font-medium text-gray-700">{{ ucfirst($defaultLabels[$index]) }}<span
+                                                class="text-red-500 font-bold text-2xl">*</span></label>
                                         <input type="text" name="value[]"
                                             class="form-control mt-1 p-2 border border-gray-300 rounded-md w-full"
-                                            required>
+                                            placeholder="Enter {{ $defaultLabels[$index] }}" required>
                                     </div>
 
                                     <div>
-                                <label for="icon" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility icon</label>
-                                <select id="icon" name="icon[]" required
-                                    class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
-                                    <option value="" disabled selected>Select a facility icon</option>
-                                    @foreach ($icons as $icon)
-                                        <option value="{{ $icon->id }}">{{ $icon->icon_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
+                                        <label for="icon"
+                                            class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility
+                                            icon<span class="text-red-500 font-bold text-2xl">*</span></label>
+                                        <select id="icon" name="icon[]" required
+                                            class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
+                                            <option value="" disabled>Select a facility icon<span
+                                                    class="text-red-500 font-bold text-2xl">*</span></option>
+                                            @foreach ($icons as $iconOption)
+                                            <option value="{{ $iconOption->id }}"
+                                                data-icon-name="{{ $iconOption->icon_name }}">
+                                                {{ $iconOption->icon_name }}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
 
                                     <div class="form-group">
-                                        <label for="display" class="block text-sm font-medium text-gray-700">Display</label>
+                                        <label for="display"
+                                            class="block text-sm font-medium text-gray-700">Display<span
+                                                class="text-red-500 font-bold text-2xl">*</span></label>
                                         <select name="display[]"
                                             class="form-control mt-1 p-2 border border-gray-300 rounded-md w-full"
                                             required>
-                                            <option value="yes">Yes</option>
+                                            <option value="yes" selected>Yes</option>
                                             <option value="no">No</option>
                                         </select>
                                     </div>
                                 </div>
+                                @endforeach
                             </div>
 
-                            <!-- Add More Button -->
                             <button type="button" id="addMoreBtn"
                                 class="text-white bg-green-500 px-4 py-2 rounded-md hover:bg-green-600 mt-4">
-                                Add More
+                                Add New
                             </button>
-                            <!-- Remove Row Button -->
                             <button type="button" id="removeRowBtn"
                                 class="text-white bg-red-500 px-4 py-2 rounded-md hover:bg-red-600 mt-4">
                                 Remove Last Row
                             </button>
+                            <button type="button" id="removeAllRowsBtn"
+                                class="text-white bg-red-700 px-4 py-2 rounded-md hover:bg-red-800 mt-4">
+                                Remove All Default Rows
+                            </button>
                         </div>
 
-                        <!-- Modal footer -->
                         <div
                             class="flex items-center p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600">
                             <button type="submit"
@@ -120,79 +139,139 @@
                     </tr>
                 </thead>
                 <tbody>
-
-
-                    
                     @foreach ($summaries as $summary)
                     <tr class="bg-white hover:bg-gray-50">
-                        <form action="{{ route('property-summary.update', $summary->id) }}" method="POST" class="update-form">
+                        <form action="{{ route('property-summary.update', $summary->id) }}" method="POST"
+                            class="update-form">
                             @csrf
                             @method('PUT')
-                    
                             <td>
-                                <textarea name="property_name" class="w-full border border-gray-300 rounded px-2 py-1 resize-none" disabled>{{ $summary->value }}</textarea>
+                                <textarea name="property_name"
+                                    class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                    disabled>{{ $summary->value }}</textarea>
                             </td>
                             <td>
-                                <textarea name="description" class="w-full border border-gray-300 rounded px-2 py-1 resize-none" disabled>{{ $summary->icon }}</textarea>
+                                <textarea name="description"
+                                    class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                    disabled>{{ $summary->icon }}</textarea>
                             </td>
                             <td>
-                                <textarea name="city_district" class="w-full border border-gray-300 rounded px-2 py-1 resize-none" disabled>{{ ucfirst($summary->display) }}</textarea>
+                                <textarea name="city_district"
+                                    class="w-full border border-gray-300 rounded px-2 py-1 resize-none"
+                                    disabled>{{ ucfirst($summary->display) }}</textarea>
                             </td>
-                    
                             <td class="flex space-x-2">
                                 <!-- Edit Button -->
                                 <button type="button" onclick="enableEdit(this)"
                                     class="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600">Edit</button>
                                 <!-- Save Button -->
-                                <button type="submit" class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 hidden save-button">Save</button>
-                            </form>
-                                <!-- Delete Button -->
-                                <form action="{{ route('property-summary.destroy', $summary->id) }}" method="POST" class="inline-block">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
-                                
-                            </td>
+                                <button type="submit"
+                                    class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 hidden save-button">Save</button>
                         </form>
+                        <!-- Delete Button -->
+                        <form action="{{ route('property-summary.destroy', $summary->id) }}" method="POST"
+                            class="inline-block">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit"
+                                class="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600">Delete</button>
+                        </form>
+                        </td>
                     </tr>
                     @endforeach
-                    
                 </tbody>
             </table>
         </div>
     </div>
 
     <script>
-        // Add More Button functionality for adding new rows
-        const addMoreBtn = document.getElementById('addMoreBtn');
-        const removeRowBtn = document.getElementById('removeRowBtn');
-        const summaryFields = document.getElementById('summaryFields');
+    // Add More Button functionality for adding new rows
+    const addMoreBtn = document.getElementById('addMoreBtn');
+    const removeRowBtn = document.getElementById('removeRowBtn');
+    const removeAllRowsBtn = document.getElementById('removeAllRowsBtn');
+    const summaryFields = document.getElementById('summaryFields');
 
-        addMoreBtn.addEventListener('click', () => {
-            const newSummaryRow = document.querySelector('.summaryRow').cloneNode(true);
+    // Function to create a new row
+    const createNewRow = () => {
+        const newSummaryRow = document.createElement('div');
+        newSummaryRow.className = 'summaryRow grid grid-cols-3 gap-4 mb-4';
+        newSummaryRow.innerHTML = `
+                <div class="form-group">
+                    <label for="value" class="block text-sm font-medium text-gray-700">Value<span class="text-red-500 font-bold text-2xl">*</span></label>
+                    <input type="text" name="value[]"
+                        class="form-control mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        placeholder="Enter value" required>
+                </div>
+                <div>
+                    <label for="icon" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Facility icon<span class="text-red-500 font-bold text-2xl">*</span></label>
+                    <select id="icon" name="icon[]" required
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-sm dark:bg-gray-800 dark:text-white">
+                        <option value="" disabled>Select a facility icon</option>
+                        @foreach ($icons as $iconOption)
+                            <option value="{{ $iconOption->id }}" data-icon-name="{{ $iconOption->icon_name }}">
+                                {{ $iconOption->icon_name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="display" class="block text-sm font-medium text-gray-700">Display<span class="text-red-500 font-bold text-2xl">*</span></label>
+                    <select name="display[]"
+                        class="form-control mt-1 p-2 border border-gray-300 rounded-md w-full"
+                        required>
+                        <option value="yes" selected>Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+            `;
+        return newSummaryRow;
+    };
 
-            // Clear input values in the cloned row
-            newSummaryRow.querySelectorAll('input, select').forEach(input => input.value = '');
+    // Add More Button
+    addMoreBtn.addEventListener('click', () => {
+        const newRow = createNewRow();
+        summaryFields.appendChild(newRow);
+    });
 
-            summaryFields.appendChild(newSummaryRow);
-        });
+    // Remove Last Row Button
+    removeRowBtn.addEventListener('click', () => {
+        const rows = document.querySelectorAll('.summaryRow');
+        if (rows.length > 0) {
+            rows[rows.length - 1].remove(); // Remove the last row
+        }
+    });
 
-        removeRowBtn.addEventListener('click', () => {
-            const rows = document.querySelectorAll('.summaryRow');
-            if (rows.length > 1) {
-                rows[rows.length - 1].remove();
-            } else {
-                alert('At least one row must remain!');
+    // Remove All Rows Button
+    removeAllRowsBtn.addEventListener('click', () => {
+        summaryFields.innerHTML = ''; // Remove all rows
+    });
+
+    // Set default icons using JavaScript
+    document.addEventListener('DOMContentLoaded', () => {
+        const defaultIcons = ['IoLocationOutline', 'FaRegClock', 'PiUsersThree', 'GoCommentDiscussion'];
+        const rows = document.querySelectorAll('.summaryRow');
+
+        rows.forEach((row, index) => {
+            const iconSelect = row.querySelector('select[name="icon[]"]');
+            if (iconSelect) {
+                const options = iconSelect.querySelectorAll('option');
+                options.forEach(option => {
+                    if (option.getAttribute('data-icon-name') === defaultIcons[index]) {
+                        option.selected = true;
+                    }
+                });
             }
         });
+    });
     </script>
+
     <script>
-        function enableEdit(button) {
-            const row = button.closest('tr');
-            row.querySelectorAll('textarea').forEach(textarea => textarea.disabled = false); // Enable all textarea fields
-            row.querySelectorAll('input').forEach(input => input.disabled = false); // Enable all input fields (if any)
-            button.classList.add('hidden'); // Hide the Edit button
-            row.querySelector('.save-button').classList.remove('hidden'); // Show the Save button
-        }
+    function enableEdit(button) {
+        const row = button.closest('tr');
+        row.querySelectorAll('textarea').forEach(textarea => textarea.disabled = false); // Enable all textarea fields
+        row.querySelectorAll('input').forEach(input => input.disabled = false); // Enable all input fields (if any)
+        button.classList.add('hidden'); // Hide the Edit button
+        row.querySelector('.save-button').classList.remove('hidden'); // Show the Save button
+    }
     </script>
 </x-app-layout>

@@ -16,5 +16,6 @@ class TourConsultationRequest extends Model
         'number',
         'address',
         'additional_info',
+        'property_name'
     ];
 }

@@ -67,6 +67,7 @@ class TourConsultationRequestAdminController extends Controller
             'number' => 'required|string|max:20',
             'address' => 'required|string|max:255',
             'additional_info' => 'nullable|string',
+            'property_name' => 'nullable|string',
         ]);
 
         $tourConsultationRequest->update($validatedData);
